@@ -4,7 +4,7 @@ from torchvision import datasets, transforms
 from torchvision.datasets import MNIST
 
 
-def prepare_dataset(data_dir, batch_size=32):
+def prepare_dataset(data_dir):
     # Define the transformations to apply to the images
     transform = transforms.Compose([
         transforms.Resize((224, 224)),  # Resize images to 224x224
@@ -26,28 +26,14 @@ def prepare_dataset(data_dir, batch_size=32):
     # Split dataset into training and testing sets
     train_set, test_set = random_split(dataset, [train_size, test_size])
 
-    # Create DataLoader for training set
-    train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
-
-    # Create DataLoader for testing set
-    test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False)
-
-    # Define classes
-    classes = dataset.classes
-
-    # Print number of samples in each set
-    print(f"Number of samples in training set: {len(train_set)}")
-    print(f"Number of samples in testing set: {len(test_set)}")
-    print(f"Classes: {classes}")
-
-    return train_loader, test_loader, classes
+    return train_set, test_set
 
 
 def prepare_dataset(num_partitions: int, batch_size: int, val_ratio: float = 0.1):
     """Download MNIST and generate IID partitions."""
 
     # download MNIST in case it's not already in the system
-    trainset, testset, classes = prepare_dataset()
+    trainset, testset = prepare_dataset("/home/kishan/Documents/projects/Lung_disease_prediction/dataset")
 
     # split trainset into `num_partitions` trainsets (one per client)
     # figure out number of training examples per partition
