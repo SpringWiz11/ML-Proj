@@ -1,10 +1,11 @@
+
 import torch
 from torch.utils.data import random_split, DataLoader
 from torchvision import datasets, transforms
 from torchvision.datasets import MNIST
 
 
-def prepare_dataset(data_dir):
+def prepare_data(data_dir):
     # Define the transformations to apply to the images
     transform = transforms.Compose([
         transforms.Resize((224, 224)),  # Resize images to 224x224
@@ -30,18 +31,21 @@ def prepare_dataset(data_dir):
 
 
 def prepare_dataset(num_partitions: int, batch_size: int, val_ratio: float = 0.1):
-    """Download MNIST and generate IID partitions."""
-
-    # download MNIST in case it's not already in the system
-    trainset, testset = prepare_dataset("/home/kishan/Documents/projects/Lung_disease_prediction/dataset")
-
-    # split trainset into `num_partitions` trainsets (one per client)
+    trainset, testset = prepare_data("/home/kishan/Documents/projects/Lung_disease_prediction/dataset")
+    # print(f'{len(trainset)}')
+    # print(f'{len(testset)}')
+    # # split trainset into `num_partitions` trainsets (one per client)
     # figure out number of training examples per partition
     num_images = len(trainset) // num_partitions
 
     # a list of partition lenghts (all partitions are of equal size)
     partition_len = [num_images] * num_partitions
+    # print(f'{len(trainset)}')
+    # print(f'{num_images}')
+    # print(f'{partition_len}')
 
+    print(sum(partition_len))
+    print(len(trainset))
     # split randomly. This returns a list of trainsets, each with `num_images` training examples
     # Note this is the simplest way of splitting this dataset. A more realistic (but more challenging) partitioning
     # would induce heterogeneity in the partitions in the form of for example: each client getting a different
@@ -49,7 +53,7 @@ def prepare_dataset(num_partitions: int, batch_size: int, val_ratio: float = 0.1
     # clients not having a single training example for certain classes). If you are curious, you can check online
     # for Dirichlet (LDA) or pathological dataset partitioning in FL. A place to start is: https://arxiv.org/abs/1909.06335
     trainsets = random_split(
-        trainset, partition_len, torch.Generator().manual_seed(2023)
+        trainset, partition_len, torch.Generator().manual_seed(1)
     )
 
     # create dataloaders with train+val support
@@ -82,6 +86,8 @@ def prepare_dataset(num_partitions: int, batch_size: int, val_ratio: float = 0.1
     # Also, in some settings (specially outside simulation) it might not be feasible to construct a validation
     # set on the server side, therefore evaluating the global model can only be done by the clients. (see the comment
     # in main.py above the strategy definition for more details on this)
-    testloader = DataLoader(testset, batch_size=128)
+    testloader = DataLoader(testset, batch_size=32)
 
     return trainloaders, valloaders, testloader
+
+# data = prepare_dataset(cfg.num_clients)

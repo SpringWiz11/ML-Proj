@@ -1,0 +1,108 @@
+[2024-04-04 01:59:11,219][flwr][INFO] - Starting Flower simulation, config: ServerConfig(num_rounds=10, round_timeout=None)
+[2024-04-04 01:59:15,621][flwr][INFO] - Flower VCE: Ray initialized with resources: {'CPU': 8.0, 'node:23.23.0.218': 1.0, 'node:__internal_head__': 1.0, 'memory': 1421942784.0, 'object_store_memory': 710971392.0}
+[2024-04-04 01:59:15,621][flwr][INFO] - Optimize your simulation with Flower VCE: https://flower.dev/docs/framework/how-to-run-simulations.html
+[2024-04-04 01:59:15,621][flwr][INFO] - Flower VCE: Resources for each Virtual Client: {'num_cpus': 2, 'num_gpus': 0.0}
+[2024-04-04 01:59:15,639][flwr][INFO] - Flower VCE: Creating VirtualClientEngineActorPool with 4 actors
+[2024-04-04 01:59:15,639][flwr][INFO] - Initializing global parameters
+[2024-04-04 01:59:15,639][flwr][INFO] - Requesting initial parameters from one random client
+[2024-04-04 01:59:19,250][flwr][ERROR] - Traceback (most recent call last):
+  File "/home/kishan/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 138, in _submit_job
+    res = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/kishan/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 414, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/kishan/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 300, in _fetch_future_result
+    res_cid, res = ray.get(future)  # type: (str, ClientRes)
+  File "/home/kishan/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 22, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/kishan/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/kishan/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2626, in get
+    raise value
+ray.exceptions.OutOfMemoryError: Task was killed due to the node running low on memory.
+Memory on the node (IP: 23.23.0.218, ID: 920dc79402ee5ecd16a4eb7550b89072504e3c0fd7bee3a3a8b3e947) where the task (task ID: ffffffffffffffff9aff4e86c8538d077ad287c801000000, name=DefaultActor.__init__, pid=217255, memory used=0.13GB) was running was 7.11GB / 7.48GB (0.950182), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: ddec372fa3900cd708b1de74b2ed2053f0979970d7b232cd84c46293) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 23.23.0.218`. To see the logs of the worker, use `ray logs worker-ddec372fa3900cd708b1de74b2ed2053f0979970d7b232cd84c46293*out -ip 23.23.0.218. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+117434	0.63	/snap/whatsie/148/usr/bin/whatsie
+216377	0.45	python3 main.py
+189737	0.35	/snap/code/155/usr/share/code/code /home/kishan/.vscode/extensions/ms-python.vscode-pylance-2024.4.1...
+189320	0.19	/snap/code/155/usr/share/code/code --type=utility --utility-sub-type=node.mojom.NodeService --lang=e...
+95610	0.19	/opt/microsoft/msedge-dev/msedge
+119189	0.19	telegram-desktop --
+188731	0.17	/snap/code/155/usr/share/code/code --type=renderer --enable-crash-reporter=542a7ea6-1f3c-4384-8f3d-1...
+96454	0.14	/opt/microsoft/msedge-dev/msedge --type=renderer --crashpad-handler-pid=95619 --enable-crash-reporte...
+96617	0.14	/opt/microsoft/msedge-dev/msedge --type=renderer --crashpad-handler-pid=95619 --enable-crash-reporte...
+3351	0.13	/usr/bin/gnome-shell
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+
+[2024-04-04 01:59:19,251][flwr][ERROR] - Task was killed due to the node running low on memory.
+Memory on the node (IP: 23.23.0.218, ID: 920dc79402ee5ecd16a4eb7550b89072504e3c0fd7bee3a3a8b3e947) where the task (task ID: ffffffffffffffff9aff4e86c8538d077ad287c801000000, name=DefaultActor.__init__, pid=217255, memory used=0.13GB) was running was 7.11GB / 7.48GB (0.950182), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: ddec372fa3900cd708b1de74b2ed2053f0979970d7b232cd84c46293) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 23.23.0.218`. To see the logs of the worker, use `ray logs worker-ddec372fa3900cd708b1de74b2ed2053f0979970d7b232cd84c46293*out -ip 23.23.0.218. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+117434	0.63	/snap/whatsie/148/usr/bin/whatsie
+216377	0.45	python3 main.py
+189737	0.35	/snap/code/155/usr/share/code/code /home/kishan/.vscode/extensions/ms-python.vscode-pylance-2024.4.1...
+189320	0.19	/snap/code/155/usr/share/code/code --type=utility --utility-sub-type=node.mojom.NodeService --lang=e...
+95610	0.19	/opt/microsoft/msedge-dev/msedge
+119189	0.19	telegram-desktop --
+188731	0.17	/snap/code/155/usr/share/code/code --type=renderer --enable-crash-reporter=542a7ea6-1f3c-4384-8f3d-1...
+96454	0.14	/opt/microsoft/msedge-dev/msedge --type=renderer --crashpad-handler-pid=95619 --enable-crash-reporte...
+96617	0.14	/opt/microsoft/msedge-dev/msedge --type=renderer --crashpad-handler-pid=95619 --enable-crash-reporte...
+3351	0.13	/usr/bin/gnome-shell
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+[2024-04-04 01:59:19,252][flwr][ERROR] - Task was killed due to the node running low on memory.
+Memory on the node (IP: 23.23.0.218, ID: 920dc79402ee5ecd16a4eb7550b89072504e3c0fd7bee3a3a8b3e947) where the task (task ID: ffffffffffffffff9aff4e86c8538d077ad287c801000000, name=DefaultActor.__init__, pid=217255, memory used=0.13GB) was running was 7.11GB / 7.48GB (0.950182), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: ddec372fa3900cd708b1de74b2ed2053f0979970d7b232cd84c46293) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 23.23.0.218`. To see the logs of the worker, use `ray logs worker-ddec372fa3900cd708b1de74b2ed2053f0979970d7b232cd84c46293*out -ip 23.23.0.218. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+117434	0.63	/snap/whatsie/148/usr/bin/whatsie
+216377	0.45	python3 main.py
+189737	0.35	/snap/code/155/usr/share/code/code /home/kishan/.vscode/extensions/ms-python.vscode-pylance-2024.4.1...
+189320	0.19	/snap/code/155/usr/share/code/code --type=utility --utility-sub-type=node.mojom.NodeService --lang=e...
+95610	0.19	/opt/microsoft/msedge-dev/msedge
+119189	0.19	telegram-desktop --
+188731	0.17	/snap/code/155/usr/share/code/code --type=renderer --enable-crash-reporter=542a7ea6-1f3c-4384-8f3d-1...
+96454	0.14	/opt/microsoft/msedge-dev/msedge --type=renderer --crashpad-handler-pid=95619 --enable-crash-reporte...
+96617	0.14	/opt/microsoft/msedge-dev/msedge --type=renderer --crashpad-handler-pid=95619 --enable-crash-reporte...
+3351	0.13	/usr/bin/gnome-shell
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+[2024-04-04 01:59:19,253][flwr][ERROR] - Traceback (most recent call last):
+  File "/home/kishan/.local/lib/python3.10/site-packages/flwr/simulation/app.py", line 308, in start_simulation
+    hist = run_fl(
+  File "/home/kishan/.local/lib/python3.10/site-packages/flwr/server/app.py", line 225, in run_fl
+    hist = server.fit(num_rounds=config.num_rounds, timeout=config.round_timeout)
+  File "/home/kishan/.local/lib/python3.10/site-packages/flwr/server/server.py", line 90, in fit
+    self.parameters = self._get_initial_parameters(timeout=timeout)
+  File "/home/kishan/.local/lib/python3.10/site-packages/flwr/server/server.py", line 279, in _get_initial_parameters
+    get_parameters_res = random_client.get_parameters(ins=ins, timeout=timeout)
+  File "/home/kishan/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 180, in get_parameters
+    res = self._submit_job(get_parameters, timeout)
+  File "/home/kishan/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 147, in _submit_job
+    raise ex
+  File "/home/kishan/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 138, in _submit_job
+    res = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/kishan/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 414, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/kishan/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 300, in _fetch_future_result
+    res_cid, res = ray.get(future)  # type: (str, ClientRes)
+  File "/home/kishan/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 22, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/kishan/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/kishan/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2626, in get
+    raise value
+ray.exceptions.OutOfMemoryError: Task was killed due to the node running low on memory.
+Memory on the node (IP: 23.23.0.218, ID: 920dc79402ee5ecd16a4eb7550b89072504e3c0fd7bee3a3a8b3e947) where the task (task ID: ffffffffffffffff9aff4e86c8538d077ad287c801000000, name=DefaultActor.__init__, pid=217255, memory used=0.13GB) was running was 7.11GB / 7.48GB (0.950182), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: ddec372fa3900cd708b1de74b2ed2053f0979970d7b232cd84c46293) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 23.23.0.218`. To see the logs of the worker, use `ray logs worker-ddec372fa3900cd708b1de74b2ed2053f0979970d7b232cd84c46293*out -ip 23.23.0.218. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+117434	0.63	/snap/whatsie/148/usr/bin/whatsie
+216377	0.45	python3 main.py
+189737	0.35	/snap/code/155/usr/share/code/code /home/kishan/.vscode/extensions/ms-python.vscode-pylance-2024.4.1...
+189320	0.19	/snap/code/155/usr/share/code/code --type=utility --utility-sub-type=node.mojom.NodeService --lang=e...
+95610	0.19	/opt/microsoft/msedge-dev/msedge
+119189	0.19	telegram-desktop --
+188731	0.17	/snap/code/155/usr/share/code/code --type=renderer --enable-crash-reporter=542a7ea6-1f3c-4384-8f3d-1...
+96454	0.14	/opt/microsoft/msedge-dev/msedge --type=renderer --crashpad-handler-pid=95619 --enable-crash-reporte...
+96617	0.14	/opt/microsoft/msedge-dev/msedge --type=renderer --crashpad-handler-pid=95619 --enable-crash-reporte...
+3351	0.13	/usr/bin/gnome-shell
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+
+[2024-04-04 01:59:19,254][flwr][ERROR] - Your simulation crashed :(. This could be because of several reasons.The most common are: 
+	 > Your system couldn't fit a single VirtualClient: try lowering `client_resources`.
+	 > All the actors in your pool crashed. This could be because: 
+		 - You clients hit an out-of-memory (OOM) error and actors couldn't recover from it. Try launching your simulation with more generous `client_resources` setting (i.e. it seems {'num_cpus': 2, 'num_gpus': 0.0} is not enough for your workload). Use fewer concurrent actors. 
+		 - You were running a multi-node simulation and all worker nodes disconnected. The head node might still be alive but cannot accommodate any actor with resources: {'num_cpus': 2, 'num_gpus': 0.0}.

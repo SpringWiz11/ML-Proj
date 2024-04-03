@@ -11,60 +11,15 @@ from dataset import prepare_dataset
 from client import generate_client_fn
 from server import get_on_fit_config, get_evaluate_fn
 
-
-# A decorator for Hydra. This tells hydra to by default load the config in conf/base.yaml
 @hydra.main(config_path="conf", config_name="base", version_base=None)
 def main(cfg: DictConfig):
-    ## 1. Parse config & get experiment output dir
     print(OmegaConf.to_yaml(cfg))
-    # Hydra automatically creates a directory for your experiments
-    # by default it would be in <this directory>/outputs/<date>/<time>
-    # you can retrieve the path to it as shown below. We'll use this path to
-    # save the results of the simulation (see the last part of this main())
     save_path = HydraConfig.get().runtime.output_dir
-
-    ## 2. Prepare your dataset
-    # When simulating FL runs we have a lot of freedom on how the FL clients behave,
-    # what data they have, how much data, etc. This is not possible in real FL settings.
-    # In simulation you'd often encounter two types of dataset:
-    #       * naturally partitioned, that come pre-partitioned by user id (e.g. FEMNIST,
-    #         Shakespeare, SpeechCommands) and as a result these dataset have a fixed number
-    #         of clients and a fixed amount/distribution of data for each client.
-    #       * and others that are not partitioned in any way but are very popular in ML
-    #         (e.g. MNIST, CIFAR-10/100). We can _synthetically_ partition these datasets
-    #         into an arbitrary number of partitions and assign one to a different client.
-    #         Synthetically partitioned dataset allow for simulating different data distribution
-    #         scenarios to tests your ideas. The down side is that these might not reflect well
-    #         the type of distributions encounter in the Wild.
-    #
-    # In this tutorial we are going to partition the MNIST dataset into 100 clients (the default
-    # in our config -- but you can change this!) following a independent and identically distributed (IID)
-    # sampling mechanism. This is arguably the simples way of partitioning data but it's a good fit
-    # for this introductory tutorial.
     trainloaders, validationloaders, testloader = prepare_dataset(
         cfg.num_clients, cfg.batch_size
     )
-
-    ## 3. Define your clients
-    # Unlike in standard FL (e.g. see the quickstart-pytorch or quickstart-tensorflow examples in the Flower repo),
-    # in simulation we don't want to manually launch clients. We delegate that to the VirtualClientEngine.
-    # What we need to provide to start_simulation() with is a function that can be called at any point in time to
-    # create a client. This is what the line below exactly returns.
+    # prepare_dataset(cfg.num_clients, cfg.batch_size)
     client_fn = generate_client_fn(trainloaders, validationloaders, cfg.num_classes)
-
-    ## 4. Define your strategy
-    # A flower strategy orchestrates your FL pipeline. Although it is present in all stages of the FL process
-    # each strategy often differs from others depending on how the model _aggregation_ is performed. This happens
-    # in the strategy's `aggregate_fit()` method. In this tutorial we choose FedAvg, which simply takes the average
-    # of the models received from the clients that participated in a FL round doing fit().
-    # You can implement a custom strategy to have full control on all aspects including: how the clients are sampled,
-    # how updated models from the clients are aggregated, how the model is evaluated on the server, etc
-    # To control how many clients are sampled, strategies often use a combination of two parameters `fraction_{}` and `min_{}_clients`
-    # where `{}` can be either `fit` or `evaluate`, depending on the FL stage. The final number of clients sampled is given by the formula
-    # ``` # an equivalent bit of code is used by the strategies' num_fit_clients() and num_evaluate_clients() built-in methods.
-    #         num_clients = int(num_available_clients * self.fraction_fit)
-    #         clients_to_do_fit = max(num_clients, self.min_fit_clients)
-    # ```
     strategy = fl.server.strategy.FedAvg(
         fraction_fit=0.0,  # in simulation, since all clients are available at all times, we can just use `min_fit_clients` to control exactly how many clients we want to involve during fit
         min_fit_clients=cfg.num_clients_per_round_fit,  # number of clients to sample for fit()
