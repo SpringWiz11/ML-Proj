@@ -1,25 +1,53 @@
 import torch
 from torch.utils.data import random_split, DataLoader
-from torchvision.transforms import ToTensor, Normalize, Compose
+from torchvision import datasets, transforms
 from torchvision.datasets import MNIST
 
 
-def get_mnist(data_path: str = "./data"):
-    """Download MNIST and apply minimal transformation."""
+def prepare_dataset(data_dir, batch_size=32):
+    # Define the transformations to apply to the images
+    transform = transforms.Compose([
+        transforms.Resize((224, 224)),  # Resize images to 224x224
+        transforms.ToTensor(),           # Convert images to tensors
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # Normalize the images
+    ])
 
-    tr = Compose([ToTensor(), Normalize((0.1307,), (0.3081,))])
+    # Create dataset from the folder structure
+    dataset = datasets.ImageFolder(root=data_dir, transform=transform)
 
-    trainset = MNIST(data_path, train=True, download=True, transform=tr)
-    testset = MNIST(data_path, train=False, download=True, transform=tr)
+    # Print size of the first image in the dataset
+    img, _ = dataset[0]
+    print("Size of the first image:", img.size())
 
-    return trainset, testset
+    # Define the size of your training and testing sets
+    train_size = int(0.8 * len(dataset))
+    test_size = len(dataset) - train_size
+
+    # Split dataset into training and testing sets
+    train_set, test_set = random_split(dataset, [train_size, test_size])
+
+    # Create DataLoader for training set
+    train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
+
+    # Create DataLoader for testing set
+    test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False)
+
+    # Define classes
+    classes = dataset.classes
+
+    # Print number of samples in each set
+    print(f"Number of samples in training set: {len(train_set)}")
+    print(f"Number of samples in testing set: {len(test_set)}")
+    print(f"Classes: {classes}")
+
+    return train_loader, test_loader, classes
 
 
 def prepare_dataset(num_partitions: int, batch_size: int, val_ratio: float = 0.1):
     """Download MNIST and generate IID partitions."""
 
     # download MNIST in case it's not already in the system
-    trainset, testset = get_mnist()
+    trainset, testset, classes = prepare_dataset()
 
     # split trainset into `num_partitions` trainsets (one per client)
     # figure out number of training examples per partition
