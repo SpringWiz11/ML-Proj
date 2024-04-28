@@ -5,7 +5,7 @@ from omegaconf import DictConfig
 
 import torch
 
-from model import Net, test
+from FL.model import Net, test
 
 
 def get_on_fit_config(config: DictConfig):

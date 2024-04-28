@@ -1,0 +1,11 @@
+prefix=/home/kishan/Documents/projects/ML-Proj/.conda
+exec_prefix=/home/kishan/Documents/projects/ML-Proj/.conda
+libdir=/home/kishan/Documents/projects/ML-Proj/.conda/lib
+includedir=/home/kishan/Documents/projects/ML-Proj/.conda/include
+
+Name: uuid
+Description: Universally unique id library
+Version: 2.38.1
+Requires:
+Cflags: -I${includedir}/uuid
+Libs: -L${libdir} -luuid

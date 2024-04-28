@@ -5,7 +5,7 @@ from flwr.common import NDArrays, Scalar
 import torch
 import flwr as fl
 
-from model import Net, train, test
+from FL.model import Net, train, test
 
 
 class FlowerClient(fl.client.NumPyClient):

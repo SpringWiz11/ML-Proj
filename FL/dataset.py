@@ -31,7 +31,7 @@ def prepare_data(data_dir):
 
 
 def prepare_dataset(num_partitions: int, batch_size: int, val_ratio: float = 0.1):
-    trainset, testset = prepare_data("/home/kishan/Documents/projects/Lung_disease_prediction/dataset")
+    trainset, testset = prepare_data("/home/kishan/Documents/projects/ML-Proj/dataset")
     # print(f'{len(trainset)}')
     # print(f'{len(testset)}')
     # # split trainset into `num_partitions` trainsets (one per client)
@@ -46,12 +46,6 @@ def prepare_dataset(num_partitions: int, batch_size: int, val_ratio: float = 0.1
 
     print(sum(partition_len))
     print(len(trainset))
-    # split randomly. This returns a list of trainsets, each with `num_images` training examples
-    # Note this is the simplest way of splitting this dataset. A more realistic (but more challenging) partitioning
-    # would induce heterogeneity in the partitions in the form of for example: each client getting a different
-    # amount of training examples, each client having a different distribution over the labels (maybe even some
-    # clients not having a single training example for certain classes). If you are curious, you can check online
-    # for Dirichlet (LDA) or pathological dataset partitioning in FL. A place to start is: https://arxiv.org/abs/1909.06335
     trainsets = random_split(
         trainset, partition_len, torch.Generator().manual_seed(1)
     )
